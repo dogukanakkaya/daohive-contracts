@@ -24,7 +24,7 @@ contract VotingProposal is Ownable {
     mapping(string => Proposal) public proposals;
     mapping(address => mapping(string => bool)) public hasVotedForProposal;
 
-    event ProposalAdded(string indexed proposalId, string uri);
+    event ProposalAdded(string indexed proposalId, string uri, uint256 startAt, uint256 endAt);
     event VoteCasted(address indexed voter, string indexed proposalId, VoteType voteType);
 
     constructor(string memory _name, string memory _description, address[] memory _whitelist) {
@@ -41,10 +41,10 @@ contract VotingProposal is Ownable {
     }
 
     function addProposal(string memory _proposalId, string memory _uri, uint256 _startAt, uint256 _endAt) public onlyOwner {
-        Proposal memory newProposal = Proposal(_proposalId, _uri, 0, 0, 0, _startAt, _endAt);
-        proposals[_proposalId] = newProposal;
+        Proposal memory proposal = Proposal(_proposalId, _uri, 0, 0, 0, _startAt, _endAt);
+        proposals[_proposalId] = proposal;
 
-        emit ProposalAdded(_proposalId, _uri);
+        emit ProposalAdded(_proposalId, _uri,_startAt, _endAt);
     }
 
     function vote(string memory _proposalId, VoteType _voteType) public onlyWhitelisted {
@@ -76,7 +76,6 @@ contract VotingProposal is Ownable {
         return voteCounts;
     }
 
-
     function _addToWhitelist(address _address) private {
         whitelist[_address] = true;
         whitelistAddresses.push(_address);
@@ -104,7 +103,6 @@ contract VotingProposal is Ownable {
             whitelistAddresses.pop();
         }
     }
-
 
     function getWhitelist() public view returns (address[] memory) {
         return whitelistAddresses;
