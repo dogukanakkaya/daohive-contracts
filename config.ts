@@ -1,4 +1,5 @@
-export const POLYGON_MUMBAI_RPC_PROVIDER = process.env.POLYGON_MUMBAI_RPC_PROVIDER as string
+export const POLYGON_MUMBAI_RPC_PROVIDER = process.env.POLYGON_MUMBAI_RPC_PROVIDER!
 
-export const SUPABASE_URL = process.env.SUPABASE_URL as string
-export const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE as string
+export const SUPABASE_URL = process.env.SUPABASE_URL!
+export const SUPABASE_SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE!
+export const SUPABASE_BUCKET_ARTIFACTS = process.env.SUPABASE_BUCKET_ARTIFACTS!
