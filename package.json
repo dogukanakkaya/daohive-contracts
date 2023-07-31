@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
-    "upload:artifacts": "npx hardhat run scripts/upload-artifacts.ts"
+    "upload": "npx hardhat run scripts/upload.ts",
+    "verify:dev": "npx hardhat verify --network mumbai"
   },
   "keywords": [],
   "author": "",
