@@ -10,9 +10,7 @@ contract VotingPrivate is VotingBase {
   address[] public whitelistAddresses;
 
   constructor(string memory _name, string memory _description, address[] memory _whitelist) VotingBase(_name, _description) {
-    for (uint256 i = 0; i < _whitelist.length; i++) {
-      _addToWhitelist(_whitelist[i]);
-    }
+    addToWhitelist(_whitelist);
   }
 
   function vote(string memory _proposalId, VotingBase.VoteType _voteType) public override onlyWhitelisted {
@@ -27,18 +25,13 @@ contract VotingPrivate is VotingBase {
 
   function addToWhitelist(address[] memory _addresses) public onlyOwner {
     for(uint i = 0; i < _addresses.length; i++) {
-      // @todo(5): change this with an if because it should not return if one of the addresses is already whitelisted
-      // but maybe instead of doing if checks just adding the address is more gas efficient check it
-      require(!whitelist[_addresses[i]], "Address already whitelisted");
-
       _addToWhitelist(_addresses[i]);
     }
   }
 
   function removeFromWhitelist(address[] memory _addresses) public onlyOwner {
     for(uint i = 0; i < _addresses.length; i++) {
-      // @todo(5)
-      require(whitelist[_addresses[i]], "Address not whitelisted");
+      if (!whitelist[_addresses[i]]) continue;
 
       whitelist[_addresses[i]] = false;
 
