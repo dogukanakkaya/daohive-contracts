@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
+    "lint": "npx eslint '**/*.{js,ts}'",
+    "lint:fix": "npx eslint '**/*.{js,ts}' --fix",
     "compile": "npx hardhat compile",
     "upload": "npx hardhat run scripts/upload.ts",
     "verify:dev": "npx hardhat verify --network mumbai"
@@ -15,6 +17,8 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "@openzeppelin/contracts": "^4.9.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
     "hardhat": "^2.17.0",
     "tsconfig-paths": "^4.2.0"
   },
