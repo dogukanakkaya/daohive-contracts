@@ -2,7 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-network-helpers'
 import { expect } from 'chai'
 import { ethers } from 'hardhat'
 
-describe('VotingPrivate', async () => {
+describe('VotingPrivate', () => {
   const CONTRACT_NAME = 'My Contract'
   const CONTRACT_DESCRIPTION = 'My Contract Description'
 
