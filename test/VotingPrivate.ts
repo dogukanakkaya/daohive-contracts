@@ -78,11 +78,11 @@ describe('VotingPrivate', () => {
 
       await expect(contract.connect(signer1).vote('id', 0)).to.be.revertedWith('Only whitelisted addresses allowed.')
 
-      const [approvalCount, disapprovalCount, neutralCount] = await contract.getVoteCount('id')
+      const proposal = await contract.proposals('id')
 
-      expect(approvalCount).to.equal(0)
-      expect(disapprovalCount).to.equal(1)
-      expect(neutralCount).to.equal(0)
+      expect(proposal.approvalCount).to.equal(0)
+      expect(proposal.disapprovalCount).to.equal(1)
+      expect(proposal.neutralCount).to.equal(0)
     })
   })
 })

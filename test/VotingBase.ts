@@ -54,7 +54,7 @@ describe('VotingBase', () => {
     it('should vote successfully', async () => {
       const { contract, signer1, signer2 } = await loadFixture(deployTokenFixture)
 
-      const endAt = Math.floor((Date.now() + 1000 * 60 * 60 * 24) / 1000)
+      const endAt = Math.round((Date.now() + 1000 * 60 * 60 * 24) / 1000)
       await (await contract.addProposal('id', 'uri', 0, endAt)).wait()
 
       const tx1 = await contract.connect(signer1).vote('id', 0)
@@ -83,11 +83,15 @@ describe('VotingBase', () => {
       expect(args2?.voter).to.equal(signer2.address)
       expect(args2?.voteType).to.equal(1)
 
-      const [approvalCount, disapprovalCount, neutralCount] = await contract.getVoteCount('id')
+      const proposal = await contract.proposals('id')
 
-      expect(approvalCount).to.equal(1)
-      expect(disapprovalCount).to.equal(1)
-      expect(neutralCount).to.equal(0)
+      expect(proposal.id).to.equal('id')
+      expect(proposal.startAt).to.equal(0)
+      expect(proposal.endAt).to.equal(endAt)
+      expect(proposal.uri).to.equal('uri')
+      expect(proposal.approvalCount).to.equal(1)
+      expect(proposal.disapprovalCount).to.equal(1)
+      expect(proposal.neutralCount).to.equal(0)
     })
 
     it('should not allowed to vote after endAt', async () => {
@@ -96,12 +100,6 @@ describe('VotingBase', () => {
       await (await contract.addProposal('id', 'uri', 0, 0)).wait()
 
       await expect(contract.connect(signer2).vote('id', 1)).to.be.revertedWith('Voting has ended for this proposal.')
-
-      const [approvalCount, disapprovalCount, neutralCount] = await contract.getVoteCount('id')
-
-      expect(approvalCount).to.equal(0)
-      expect(disapprovalCount).to.equal(0)
-      expect(neutralCount).to.equal(0)
     })
 
     it('should not allowed to vote before startAt', async () => {
@@ -112,12 +110,6 @@ describe('VotingBase', () => {
       await (await contract.addProposal('id', 'uri', startAt, endAt)).wait()
 
       await expect(contract.connect(signer2).vote('id', 1)).to.be.revertedWith('Voting has not started for this proposal.')
-
-      const [approvalCount, disapprovalCount, neutralCount] = await contract.getVoteCount('id')
-
-      expect(approvalCount).to.equal(0)
-      expect(disapprovalCount).to.equal(0)
-      expect(neutralCount).to.equal(0)
     })
 
     it('should not allowed to vote twice', async () => {
@@ -129,11 +121,11 @@ describe('VotingBase', () => {
       await contract.connect(signer2).vote('id', 1)
       await expect(contract.connect(signer2).vote('id', 1)).to.be.revertedWith('You have already voted for this proposal.')
 
-      const [approvalCount, disapprovalCount, neutralCount] = await contract.getVoteCount('id')
+      const proposal = await contract.proposals('id')
 
-      expect(approvalCount).to.equal(0)
-      expect(disapprovalCount).to.equal(1)
-      expect(neutralCount).to.equal(0)
+      expect(proposal.approvalCount).to.equal(0)
+      expect(proposal.disapprovalCount).to.equal(1)
+      expect(proposal.neutralCount).to.equal(0)
     })
   })
 })

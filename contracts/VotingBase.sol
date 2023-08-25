@@ -53,15 +53,4 @@ contract VotingBase is Ownable {
 
         emit VoteCasted(msg.sender, _proposalId, _voteType);
     }
-
-    function getVoteCount(string memory _proposalId) public view returns (uint256[3] memory) {
-        Proposal memory proposal = proposals[_proposalId];
-        uint256[3] memory voteCounts;
-
-        voteCounts[uint8(VoteType.Approval)] = proposal.approvalCount;
-        voteCounts[uint8(VoteType.Disapproval)] = proposal.disapprovalCount;
-        voteCounts[uint8(VoteType.Neutral)] = proposal.neutralCount;
-
-        return voteCounts;
-    }
 }
