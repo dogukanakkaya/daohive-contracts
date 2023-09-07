@@ -129,15 +129,15 @@ describe('VotingBase', () => {
     })
   })
 
-  describe('votingWeight', () => {
-    it('addVotingWeight', async () => {
+  describe('weights', () => {
+    it('setWeights', async () => {
       const { contract, signer1 } = await loadFixture(deployTokenFixture)
 
-      expect(await contract.votingWeight(signer1.address)).to.equal(0)
+      expect(await contract.weights(signer1.address)).to.equal(0)
 
-      await (await contract.addVotingWeight([signer1.address], [2])).wait()
+      await (await contract.setWeights([signer1.address], [2])).wait()
 
-      expect(await contract.votingWeight(signer1.address)).to.equal(2)
+      expect(await contract.weights(signer1.address)).to.equal(2)
     })
   })
 })

@@ -20,7 +20,7 @@ contract VotingBase is Ownable {
     string public description;
     mapping(string => Proposal) public proposals;
     mapping(address => mapping(string => bool)) public hasVotedForProposal;
-    mapping(address => uint256) public votingWeight;
+    mapping(address => uint256) public weights;
 
     event ProposalAdded(string indexed proposalId, string uri, uint256 startAt, uint256 endAt);
     event VoteCasted(address indexed voter, string indexed proposalId, VoteType voteType);
@@ -44,7 +44,7 @@ contract VotingBase is Ownable {
 
         hasVotedForProposal[msg.sender][_proposalId] = true;
 
-        uint256 weight = votingWeight[msg.sender];
+        uint256 weight = weights[msg.sender];
         weight = weight == 0 ? 1 : weight;
 
         if (_voteType == VoteType.Approval) {
@@ -58,11 +58,11 @@ contract VotingBase is Ownable {
         emit VoteCasted(msg.sender, _proposalId, _voteType);
     }
 
-    function addVotingWeight(address[] memory _voters, uint256[] memory _weights) public onlyOwner {
+    function setWeights(address[] memory _voters, uint256[] memory _weights) public onlyOwner {
         require(_voters.length == _weights.length, "Voters and weights must be the same length.");
 
         for(uint i = 0; i < _voters.length; i++) {
-            votingWeight[_voters[i]] = _weights[i];
+            weights[_voters[i]] = _weights[i];
         }
     }
 }
