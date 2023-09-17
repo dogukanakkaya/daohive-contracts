@@ -136,8 +136,17 @@ describe('VotingBase', () => {
       expect(await contract.weights(signer1.address)).to.equal(0)
 
       await (await contract.setWeights([signer1.address], [2])).wait()
-
       expect(await contract.weights(signer1.address)).to.equal(2)
+    })
+
+    it('deleteWeights', async () => {
+      const { contract, signer1 } = await loadFixture(deployTokenFixture)
+
+      await (await contract.setWeights([signer1.address], [2])).wait()
+      expect(await contract.weights(signer1.address)).to.equal(2)
+
+      await (await contract.deleteWeights([signer1.address])).wait()
+      expect(await contract.weights(signer1.address)).to.equal(0)
     })
   })
 })

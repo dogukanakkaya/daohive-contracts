@@ -65,4 +65,12 @@ contract VotingBase is Ownable {
             weights[_voters[i]] = _weights[i];
         }
     }
+
+    // this is more gas efficient than setting weights to 0 with `setWeights` function, normally setting a mapping to default value vs deleting it costs the same gas
+    // but in the above case, we also have second argument and we do a lookup with `_weights[i]` which costs more gas than just doing `= 0`
+    function deleteWeights(address[] memory _voters) public onlyOwner {
+        for(uint i = 0; i < _voters.length; i++) {
+            delete weights[_voters[i]];
+        }
+    }
 }
